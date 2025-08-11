@@ -110,15 +110,17 @@
         textInput.classList.remove('error');
     });
 
-
-
-
-
-
-
-
-  })
-  // Код писать здесь
+    nameInput.addEventListener('input', () => {
+        if (nameInput.value.trim() !== '') {
+            nameInput.classList.remove('error');
+        }
+    });
+    
+    textInput.addEventListener('input', () => {
+        if (textInput.value.trim() !== '') {
+            textInput.classList.remove('error');
+        }
+    });
   console.log("It works!");
 </script>
 
