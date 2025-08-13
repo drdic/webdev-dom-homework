@@ -103,17 +103,6 @@
     </li>
   `).join('');
 
-    // addButton.addEventListener('click', () => {
-    //   if (nameInput.value.trim() === '' || textInput.value.trim() === '') {
-    //     if (nameInput.value.trim() === '') {
-    //       nameInput.classList.add('error');
-    //     }
-    //     if (textInput.value.trim() === '') {
-    //       textInput.classList.add('error');
-    //     }
-    //     return;
-    //   }
-
     document.querySelectorAll('.like-button').forEach(button => {
       button.addEventListener('click', handleLike);
     });
@@ -144,27 +133,6 @@
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
 
-    // const newCommentHTML = `
-    //         <li class="comment">
-    //             <div class="comment-header">
-    //                 <div>${nameInput.value.trim()}</div>
-    //                 <div>${formattedDate}</div>
-    //             </div>
-    //             <div class="comment-body">
-    //                 <div class="comment-text">
-    //                     ${textInput.value.trim()}
-    //                 </div>
-    //             </div>
-    //             <div class="comment-footer">
-    //                 <div class="likes">
-    //                     <span class="likes-counter">0</span>
-    //                     <button class="like-button"></button>
-    //                 </div>
-    //             </div>
-    //         </li>
-    // `;
-
-    // commentsList.innerHTML += newCommentHTML;
 
     comments.push({
       id: Date.now(),
@@ -196,8 +164,6 @@
   });
 
   renderComments();
-
-
 
   console.log("It works!");
 
