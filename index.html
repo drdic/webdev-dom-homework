@@ -58,21 +58,61 @@
 <script>
   "use strict";
 
+  let comments = [
+    {
+      id: 1,
+      author: "Глеб Фокин",
+      date: "12.02.22 12:18",
+      text: "Это будет первый комментарий на этой странице",
+      likes: 3,
+      isLiked: false
+    },
+    {
+      id: 2,
+      author: "Варвара Н.",
+      date: "13.02.22 19:22",
+      text: "Мне нравится как оформлена эта страница! ❤",
+      likes: 75,
+      isLiked: true
+    }
+  ];
+
   const commentsList = document.querySelector('.comments');
   const nameInput = document.querySelector('.add-form-name');
   const textInput = document.querySelector('.add-form-text');
   const addButton = document.querySelector('.add-form-button');
 
-  addButton.addEventListener('click', () => {
-    if (nameInput.value.trim() === '' || textInput.value.trim() === '') {
-      if (nameInput.value.trim() === '') {
-        nameInput.classList.add('error');
-      }
-      if (textInput.value.trim() === '') {
-        textInput.classList.add('error');
-      }
-      return;
-    }
+  function renderComments() {
+    commentsList.innerHTML = comments.map(comment => `
+    <li class="comment" data-id="${comment.id}">
+      <div class="comment-header">
+        <div>${comment.author}</div>
+        <div>${comment.date}</div>
+      </div>
+      <div class="comment-body">
+        <div class="comment-text">
+          ${comment.text}
+        </div>
+      </div>
+      <div class="comment-footer">
+        <div class="likes">
+          <span class="likes-counter">${comment.likes}</span>
+          <button class="like-button ${comment.isLiked ? '-active-like' : ''}"></button>
+        </div>
+      </div>
+    </li>
+  `).join('');
+
+    // addButton.addEventListener('click', () => {
+    //   if (nameInput.value.trim() === '' || textInput.value.trim() === '') {
+    //     if (nameInput.value.trim() === '') {
+    //       nameInput.classList.add('error');
+    //     }
+    //     if (textInput.value.trim() === '') {
+    //       textInput.classList.add('error');
+    //     }
+    //     return;
+    //   }
 
     const now = new Date();
     const day = now.getDate().toString().padStart(2, '0');
@@ -105,24 +145,24 @@
     commentsList.innerHTML += newCommentHTML;
 
     nameInput.value = '';
-        textInput.value = '';
-        nameInput.classList.remove('error');
-        textInput.classList.remove('error');
-    });
+    textInput.value = '';
+    nameInput.classList.remove('error');
+    textInput.classList.remove('error');
+  });
 
-    nameInput.addEventListener('input', () => {
-        if (nameInput.value.trim() !== '') {
-            nameInput.classList.remove('error');
-        }
-    });
-    
-    textInput.addEventListener('input', () => {
-        if (textInput.value.trim() !== '') {
-            textInput.classList.remove('error');
-        }
-    });
+  nameInput.addEventListener('input', () => {
+    if (nameInput.value.trim() !== '') {
+      nameInput.classList.remove('error');
+    }
+  });
+
+  textInput.addEventListener('input', () => {
+    if (textInput.value.trim() !== '') {
+      textInput.classList.remove('error');
+    }
+  });
   console.log("It works!");
-  
+
 </script>
 
 </html>
