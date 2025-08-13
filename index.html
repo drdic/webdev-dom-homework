@@ -114,15 +114,30 @@
     //     return;
     //   }
 
-    const now = new Date();
-    const day = now.getDate().toString().padStart(2, '0');
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const year = now.getFullYear().toString().slice(-2);
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
+    document.querySelectorAll('.like-button').forEach(button => {
+      button.addEventListener('click', handleLike);
+    });
+  }
 
-    const newCommentHTML = `
+  function handleLike(event) {
+    const commentId = parseInt(event.target.closest('.comment').dataset.id);
+    const comment = comments.find(c => c.id === commentId);
+
+    comment.isLiked = !comment.isLiked;
+    comment.likes += comment.isLiked ? 1 : -1;
+
+    renderComments();
+  }
+
+  const now = new Date();
+  const day = now.getDate().toString().padStart(2, '0');
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const year = now.getFullYear().toString().slice(-2);
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
+
+  const newCommentHTML = `
             <li class="comment">
                 <div class="comment-header">
                     <div>${nameInput.value.trim()}</div>
@@ -142,12 +157,12 @@
             </li>
     `;
 
-    commentsList.innerHTML += newCommentHTML;
+  commentsList.innerHTML += newCommentHTML;
 
-    nameInput.value = '';
-    textInput.value = '';
-    nameInput.classList.remove('error');
-    textInput.classList.remove('error');
+  nameInput.value = '';
+  textInput.value = '';
+  nameInput.classList.remove('error');
+  textInput.classList.remove('error');
   });
 
   nameInput.addEventListener('input', () => {
