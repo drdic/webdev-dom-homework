@@ -132,6 +132,8 @@
     comment.isLiked = !comment.isLiked;
     comment.likes += comment.isLiked ? 1 : -1;
 
+    event.stopPropagation();
+
     renderComments();
   }
 
