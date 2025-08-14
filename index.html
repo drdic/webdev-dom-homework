@@ -81,6 +81,7 @@
   const nameInput = document.querySelector('.add-form-name');
   const textInput = document.querySelector('.add-form-text');
   const addButton = document.querySelector('.add-form-button');
+  let replyingTo = null;
 
   function renderComments() {
     commentsList.innerHTML = comments.map(comment => `
