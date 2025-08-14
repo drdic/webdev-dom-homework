@@ -146,12 +146,6 @@
     renderComments();
   }
 
-  // addButton.addEventListener('click', () => {
-  //   if (nameInput.value.trim() === '' || textInput.value.trim() === '') {
-  //     if (nameInput.value.trim() === '') nameInput.classList.add('error');
-  //     if (textInput.value.trim() === '') textInput.classList.add('error');
-  //     return;
-  //   }
 
   addButton.addEventListener('click', () => {
     const safeName = escapeHtml(nameInput.value.trim());
@@ -162,7 +156,6 @@
       if (safeText === '') textInput.classList.add('error');
       return;
     }
-
 
 
     const now = new Date();
@@ -176,10 +169,8 @@
 
     comments.push({
       id: Date.now(),
-      // author: nameInput.value.trim(),
       author: safeName,
       date: formattedDate,
-      // text: textInput.value.trim(),
       text: safeText,
       likes: 0,
       isLiked: false
