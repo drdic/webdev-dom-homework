@@ -126,7 +126,7 @@
         const commentId = parseInt(this.dataset.id);
         const comment = comments.find(c => c.id === commentId);
 
-        textInput.value = `> ${comment.author}: ${comment.text}\n\n`;
+        textInput.value = `> ${comment.author}: ${escapeHtml(comment.text)}\n\n`;
         replyingTo = commentId;
         textInput.focus();
       });
@@ -146,12 +146,24 @@
     renderComments();
   }
 
+  // addButton.addEventListener('click', () => {
+  //   if (nameInput.value.trim() === '' || textInput.value.trim() === '') {
+  //     if (nameInput.value.trim() === '') nameInput.classList.add('error');
+  //     if (textInput.value.trim() === '') textInput.classList.add('error');
+  //     return;
+  //   }
+
   addButton.addEventListener('click', () => {
-    if (nameInput.value.trim() === '' || textInput.value.trim() === '') {
-      if (nameInput.value.trim() === '') nameInput.classList.add('error');
-      if (textInput.value.trim() === '') textInput.classList.add('error');
+    const safeName = escapeHtml(nameInput.value.trim());
+    const safeText = escapeHtml(textInput.value.trim());
+
+    if (safeName === '' || safeText === '') {
+      if (safeName === '') nameInput.classList.add('error');
+      if (safeText === '') textInput.classList.add('error');
       return;
     }
+
+
 
     const now = new Date();
     const day = now.getDate().toString().padStart(2, '0');
@@ -164,9 +176,11 @@
 
     comments.push({
       id: Date.now(),
-      author: nameInput.value.trim(),
+      // author: nameInput.value.trim(),
+      author: safeName,
       date: formattedDate,
-      text: textInput.value.trim(),
+      // text: textInput.value.trim(),
+      text: safeText,
       likes: 0,
       isLiked: false
     });
