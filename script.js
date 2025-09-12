@@ -19,6 +19,7 @@ let comments = [
     }
 ];
 
+// Получаем ссылки на DOM-элементы для работы с ними
 const commentsList = document.querySelector('.comments');
 const nameInput = document.querySelector('.add-form-name');
 const textInput = document.querySelector('.add-form-text');
@@ -35,6 +36,7 @@ function escapeHtml(unsafe) {
 }
 
 function renderComments() {
+// Генерируем HTML для каждого комментария и объединяем в одну строку
     commentsList.innerHTML = comments.map(comment => `
     <li class="comment" data-id="${comment.id}">
       <div class="comment-header">
@@ -55,10 +57,11 @@ function renderComments() {
     </li>
   `).join('');
 
+// Добавляем обработчики кликов на кнопки лайков
     document.querySelectorAll('.like-button').forEach(button => {
         button.addEventListener('click', handleLike);
     });
-
+// Добавляем обработчики кликов на комментарии для ответов
     document.querySelectorAll('.comment').forEach(comment => {
         comment.addEventListener('click', function (event) {
             if (event.target.closest('.like-button')) {
@@ -75,17 +78,17 @@ function renderComments() {
     });
 
 }
-
+// Получаем ID комментария из ближайшего родительского элемента
 function handleLike(event) {
     const commentId = parseInt(event.target.closest('.comment').dataset.id);
-    const comment = comments.find(c => c.id === commentId);
+    const comment = comments.find(c => c.id === commentId); // Находим комментарий в массиве
 
-    comment.isLiked = !comment.isLiked;
-    comment.likes += comment.isLiked ? 1 : -1;
+    comment.isLiked = !comment.isLiked; // Меняем статус лайка на противоположный
+    comment.likes += comment.isLiked ? 1 : -1;  // Увеличиваем или уменьшаем счетчик лайков
 
-    event.stopPropagation();
+    event.stopPropagation(); // Останавливаем всплытие события, чтобы не сработал обработчик комментария
 
-    renderComments();
+    renderComments(); // Перерисовываем комментарии
 }
 
 
