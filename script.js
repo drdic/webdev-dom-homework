@@ -22,8 +22,28 @@ function escapeHtml(unsafe) {
         .replace(/'/g, "&#039;");
 }
 
+function loadComments() {
+    commentsList.innerHTML = '<div class="loading">Загрузка комментариев...</div>';
+
+    return fetch(API_URL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка загрузки комментариев');
+            }
+            return response.json();
+        })
+        .then(data => {
+            comments = data.comments;
+            renderComments();
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            commentsList.innerHTML = '<div class="error">Не удалось загрузить комментарии</div>';
+        });
+}
+
 function renderComments() {
-// Генерируем HTML для каждого комментария и объединяем в одну строку
+    // Генерируем HTML для каждого комментария и объединяем в одну строку
     commentsList.innerHTML = comments.map(comment => `
     <li class="comment" data-id="${comment.id}">
       <div class="comment-header">
@@ -44,11 +64,11 @@ function renderComments() {
     </li>
   `).join('');
 
-// Добавляем обработчики кликов на кнопки лайков
+    // Добавляем обработчики кликов на кнопки лайков
     document.querySelectorAll('.like-button').forEach(button => {
         button.addEventListener('click', handleLike);
     });
-// Добавляем обработчики кликов на комментарии для ответов
+    // Добавляем обработчики кликов на комментарии для ответов
     document.querySelectorAll('.comment').forEach(comment => {
         comment.addEventListener('click', function (event) {
             if (event.target.closest('.like-button')) {
