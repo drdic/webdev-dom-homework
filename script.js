@@ -47,8 +47,8 @@ function renderComments() {
     commentsList.innerHTML = comments.map(comment => `
     <li class="comment" data-id="${comment.id}">
       <div class="comment-header">
-        <div>${comment.author}</div>
-        <div>${comment.date}</div>
+        <div>${comment.author.name}</div>
+        <div>${new Date(comment.date).toLocaleString()}</div>
       </div>
       <div class="comment-body">
         <div class="comment-text">
