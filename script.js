@@ -200,6 +200,6 @@ textInput.addEventListener('input', () => {
     }
 });
 
-renderComments();
+loadComments();
 
 console.log("It works!");
