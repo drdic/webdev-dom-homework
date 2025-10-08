@@ -23,7 +23,7 @@ function escapeHtml(unsafe) {
 }
 
 function loadComments() {
-    commentsList.innerHTML = '<div class="loading">Загрузка комментариев...</div>';
+    commentsList.innerHTML = '<div class="loading">Пожалуйста подождите, загружаю комментарии...</div>';
 
     return fetch(API_URL)
         .then(response => {
@@ -38,7 +38,7 @@ function loadComments() {
         })
         .catch(error => {
             console.error('Ошибка:', error);
-            commentsList.innerHTML = '<div class="error">Не удалось загрузить комментарии</div>';
+            commentsList.innerHTML = '<div class="error">Не удалось загрузить комментарии...</div>';
         });
 }
 
