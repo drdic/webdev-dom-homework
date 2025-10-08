@@ -1,23 +1,10 @@
 "use strict";
 
-let comments = [
-    {
-        id: 1,
-        author: "Глеб Фокин",
-        date: "12.02.22 12:18",
-        text: "Это будет первый комментарий на этой странице",
-        likes: 3,
-        isLiked: false
-    },
-    {
-        id: 2,
-        author: "Варвара Н.",
-        date: "13.02.22 19:22",
-        text: "Мне нравится как оформлена эта страница! ❤",
-        likes: 75,
-        isLiked: true
-    }
-];
+const API_BASE_URL = "https://wedev-api.sky.pro/api/v1";
+const PERSONAL_KEY = "eduard-zakharevskiy";
+const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`;
+
+let comments = [];
 
 // Получаем ссылки на DOM-элементы для работы с ними
 const commentsList = document.querySelector('.comments');
