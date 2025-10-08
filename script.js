@@ -99,6 +99,45 @@ function handleLike(event) {
 }
 
 
+// addButton.addEventListener('click', () => {
+//     const safeName = escapeHtml(nameInput.value.trim());
+//     const safeText = escapeHtml(textInput.value.trim());
+
+//     if (safeName === '' || safeText === '') {
+//         if (safeName === '') nameInput.classList.add('error');
+//         if (safeText === '') textInput.classList.add('error');
+//         return;
+//     }
+
+
+//     const now = new Date();
+//     const day = now.getDate().toString().padStart(2, '0');
+//     const month = (now.getMonth() + 1).toString().padStart(2, '0');
+//     const year = now.getFullYear().toString().slice(-2);
+//     const hours = now.getHours().toString().padStart(2, '0');
+//     const minutes = now.getMinutes().toString().padStart(2, '0');
+//     const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
+
+
+//     comments.push({
+//         id: Date.now(),
+//         author: safeName,
+//         date: formattedDate,
+//         text: safeText,
+//         likes: 0,
+//         isLiked: false
+//     });
+
+//     renderComments();
+
+//     nameInput.value = '';
+//     textInput.value = '';
+//     nameInput.classList.remove('error');
+//     textInput.classList.remove('error');
+
+//     replyingTo = null;
+// });
+
 addButton.addEventListener('click', () => {
     const safeName = escapeHtml(nameInput.value.trim());
     const safeText = escapeHtml(textInput.value.trim());
@@ -109,33 +148,44 @@ addButton.addEventListener('click', () => {
         return;
     }
 
+    addButton.disabled = true;
+    addButton.textContent = 'Добавляем...';
 
-    const now = new Date();
-    const day = now.getDate().toString().padStart(2, '0');
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const year = now.getFullYear().toString().slice(-2);
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
+    fetch(API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: safeName,
+            text: safeText
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.error || 'Ошибка сервера');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            nameInput.value = '';
+            textInput.value = '';
+            nameInput.classList.remove('error');
+            textInput.classList.remove('error');
 
-
-    comments.push({
-        id: Date.now(),
-        author: safeName,
-        date: formattedDate,
-        text: safeText,
-        likes: 0,
-        isLiked: false
-    });
-
-    renderComments();
-
-    nameInput.value = '';
-    textInput.value = '';
-    nameInput.classList.remove('error');
-    textInput.classList.remove('error');
-
-    replyingTo = null;
+            return loadComments();
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert(error.message);
+        })
+        .finally(() => {
+            addButton.disabled = false;
+            addButton.textContent = 'Написать';
+            replyingTo = null;
+        });
 });
 
 nameInput.addEventListener('input', () => {
