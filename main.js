@@ -8,7 +8,7 @@ const commentsList = document.querySelector('.comments');
 async function loadComments() {
     try {
         commentsList.innerHTML = '<div class="loading">Загрузка комментариев...</div>';
-        comments.length = 0; // Очищаем массив
+        comments.length = 0;
         comments.push(...await getComments());
         renderComments(comments, commentsList);
     } catch (error) {
