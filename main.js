@@ -4,18 +4,36 @@ import { renderComments } from './modules/render.js';
 import { initEventListeners } from './modules/listeners.js';
 
 const commentsList = document.querySelector('.comments');
+const commentsLoading = document.getElementById('comments-loading');
+
+// Функции для управления загрузкой комментариев
+function showCommentsLoading() {
+    commentsLoading.style.display = 'block';
+    commentsList.style.opacity = '0.3'; // Затемняем вместо скрытия
+}
+
+function hideCommentsLoading() {
+    commentsLoading.style.display = 'none';
+    commentsList.style.opacity = '1'; // Возвращаем нормальную прозрачность
+}
 
 async function loadComments() {
     try {
-        commentsList.innerHTML = '<div class="loading">Загрузка комментариев...</div>';
+        // ПОКАЗЫВАЕМ загрузку только при СТАРТЕ приложения
+        showCommentsLoading();
+        
         comments.length = 0;
-        comments.push(...await getComments());
+        const freshComments = await getComments();
+        comments.push(...freshComments);
         renderComments(comments, commentsList);
+        
     } catch (error) {
         commentsList.innerHTML = '<div class="error">Не удалось загрузить комментарии</div>';
+    } finally {
+        // ВСЕГДА скрываем загрузку
+        hideCommentsLoading();
     }
 }
-
 
 loadComments();
 initEventListeners(commentsList, loadComments);
