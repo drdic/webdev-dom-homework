@@ -19,8 +19,10 @@ export function initAddCommentListener() {
             return;
         }
 
-        addButton.disabled = true;
-        addButton.textContent = 'Добавляем...';
+        // addButton.disabled = true;
+        // addButton.textContent = 'Добавляем...';
+
+        showFormLoading(); // ПОКАЗЫВАЕМ лоадер формы
 
         try {
             await addComment({ name: safeName, text: safeText });
@@ -28,12 +30,20 @@ export function initAddCommentListener() {
             textInput.value = '';
             nameInput.classList.remove('error');
             textInput.classList.remove('error');
-            await loadComments(); // используем импортированную функцию
+            // await loadComments(); // используем импортированную функцию
+
+            const updatedComments = await getComments();
+            comments.length = 0;
+            comments.push(...updatedComments);
+            renderComments();
+
         } catch (error) {
             alert(error.message);
         } finally {
-            addButton.disabled = false;
-            addButton.textContent = 'Написать';
+            // addButton.disabled = false;
+            // addButton.textContent = 'Написать';
+
+            hideFormLoading(); // СКРЫВАЕМ лоадер формы
         }
     });
 

@@ -39,3 +39,4 @@ loadComments();
 initAddCommentListener(); // вызов изменен и без аргументов
 
 export { loadComments };
+export { showFormLoading, hideFormLoading };
