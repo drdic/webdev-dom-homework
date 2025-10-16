@@ -8,8 +8,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 80px;
-  padding-bottom: 200px;
+  padding-top: 40px;
+  padding-bottom: 100px;
   background: #202020;
   min-height: 100vh;
 }
@@ -156,7 +156,7 @@ body {
 
 .loading {
   text-align: center;
-  /* padding: 40px; */
+  padding: 40px;
   color: #ffffff;
   font-size: 18px;
 }
