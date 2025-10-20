@@ -25,38 +25,6 @@ export async function getComments() {
     }
 }
 
-// export async function addComment({ name, text, forceError = false }) {
-//     try {
-//         const response = await fetch(API_URL, {
-//             method: 'POST',
-//             body: JSON.stringify({
-//                 name,
-//                 text,
-//                 forceError // для тестирования 500 ошибки
-//             })
-//         });
-
-//         // обработка HTTP статусов для POST запроса
-//         if (response.status === 500) {
-//             throw new Error("Сервер сломался, попробуй позже");
-//         }
-
-//         if (response.status === 400) {
-//             throw new Error("Имя и комментарий должны быть не короче 3 символов");
-//         }
-
-//         if (!response.ok) {
-//             throw new Error(`Ошибка сервера: ${response.status}`);
-//         }
-
-//         return await response.json();
-
-//     } catch (error) {
-//         console.error('Ошибка при добавлении комментария:', error);
-//         throw error; // пробрасываем ошибку дальше
-//     }
-// }
-
 export async function addComment({ name, text, forceError = false }, retryCount = 0) {
     const maxRetries = 2; // максимально 2 повторные попытки
 

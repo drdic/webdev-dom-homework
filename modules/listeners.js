@@ -9,69 +9,6 @@ export function initAddCommentListener() {
     const textInput = document.querySelector('.add-form-text');
     const addButton = document.querySelector('.add-form-button');
 
-    // addButton.addEventListener('click', async () => {
-    //     const safeName = escapeHtml(nameInput.value.trim());
-    //     const safeText = escapeHtml(textInput.value.trim());
-
-    //     // валидация длины должна быть перед отправкой
-    //     if (safeName.length < 3 || safeText.length < 3) {
-    //         alert('Имя и комментарий должны быть не короче 3 символов');
-    //         return;
-    //     }
-
-    //     // сохраняем данные до отправки
-    //     const savedName = nameInput.value;
-    //     const savedText = textInput.value;
-
-    //     // показываем лоадер формы - комментарий добавляется
-    //     showFormLoading();
-    //     addButton.disabled = true;
-    //     addButton.textContent = 'Добавляем...';
-
-    //     try {
-    //         // 1. добавляем комментарий
-    //         await addComment({
-    //             name: safeName,
-    //             text: safeText,
-    //             forceError: false // меняем на true для теста 500 ошибки
-    //         });
-
-    //         // 2. обновляем комментари без глобального лоадера
-    //         const updatedComments = await getComments();
-    //         comments.length = 0;
-    //         comments.push(...updatedComments);
-    //         renderComments();
-
-    //         // ощищаем форму
-    //         nameInput.value = '';
-    //         textInput.value = '';
-    //         nameInput.classList.remove('error');
-    //         textInput.classList.remove('error');
-
-    //     } catch (error) {
-    //         // обработка ошибок
-    //         if (error.message === 'Failed to fetch') {
-    //             alert('Кажется, у вас сломался интернет, попробуйте позже');
-    //         } else if (error.message.includes('Сервер сломался')) {
-    //             alert('Сервер сломался, попробуй позже');
-    //         } else if (error.message.includes('не короче 3 символов')) {
-    //             alert('Имя и комментарий должны быть не короче 3 символов');
-    //         } else {
-    //             alert(error.message);
-    //         }
-
-    //         // восстанавливаем данные в форме
-    //         nameInput.value = savedName;
-    //         textInput.value = savedText;
-
-    //     } finally {
-    //         // скрываем лоадер и показываем форму
-    //         hideFormLoading();
-    //         addButton.disabled = false;
-    //         addButton.textContent = 'Написать';
-    //     }
-    // });
-
     addButton.addEventListener('click', async () => {
         const safeName = escapeHtml(nameInput.value.trim());
         const safeText = escapeHtml(textInput.value.trim());
