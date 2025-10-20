@@ -1,7 +1,7 @@
-import { loadComments } from '../main.js'; // импортируем LoadComments
-import { comments, replyingTo } from './data.js';
-import { addComment } from './api.js';
+import { comments } from './data.js';
+import { addComment, getComments } from './api.js'; // ИМПОРТИРУЕМ getComments
 import { renderComments } from './render.js';
+import { showFormLoading, hideFormLoading } from './loaders.js'; // ИМПОРТИРУЕМ из loaders.js
 import { escapeHtml } from './utils.js';
 
 export function initAddCommentListener() {
@@ -19,21 +19,30 @@ export function initAddCommentListener() {
             return;
         }
 
-        addButton.disabled = true;
-        addButton.textContent = 'Добавляем...';
+        // ПОКАЗЫВАЕМ лоадер формы (скрывает форму, показывает "Комментарий добавляется...")
+        showFormLoading();
 
         try {
+            // 1. Добавляем комментарий
             await addComment({ name: safeName, text: safeText });
+            
+            // 2. ОБНОВЛЯЕМ комментарии БЕЗ глобального лоадера
+            const updatedComments = await getComments(); // Прямой вызов API
+            comments.length = 0;
+            comments.push(...updatedComments);
+            renderComments();
+
+            // 3. Очищаем форму
             nameInput.value = '';
             textInput.value = '';
             nameInput.classList.remove('error');
             textInput.classList.remove('error');
-            await loadComments(); // используем импортированную функцию
+            
         } catch (error) {
             alert(error.message);
         } finally {
-            addButton.disabled = false;
-            addButton.textContent = 'Написать';
+            // СКРЫВАЕМ лоадер формы (показывает форму обратно)
+            hideFormLoading();
         }
     });
 
