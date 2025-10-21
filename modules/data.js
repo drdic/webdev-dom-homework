@@ -1,2 +1,2 @@
-export let comments = [];
-export let replyingTo = null;
+export let comments = []
+export let replyingTo = null
