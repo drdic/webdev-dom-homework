@@ -1,10 +1,12 @@
-import { comments } from './data.js';
-import { initLikeListeners, initQuoteListeners } from './listeners.js';
+import { comments } from './data.js'
+import { initLikeListeners, initQuoteListeners } from './listeners.js'
 
 export function renderComments() {
-  const commentsList = document.querySelector('.comments');
+    const commentsList = document.querySelector('.comments')
 
-  commentsList.innerHTML = comments.map(comment => `
+    commentsList.innerHTML = comments
+        .map(
+            (comment) => `
     <li class="comment" data-id="${comment.id}">
       <div class="comment-header">
         <div>${comment.author.name}</div>
@@ -20,9 +22,11 @@ export function renderComments() {
         </div>
       </div>
     </li>
-  `).join('');
+  `,
+        )
+        .join('')
 
-  // вызываем функции из listeners.js вместо кода здесь
-  initLikeListeners();
-  initQuoteListeners();
+    // вызываем функции из listeners.js вместо кода здесь
+    initLikeListeners()
+    initQuoteListeners()
 }
