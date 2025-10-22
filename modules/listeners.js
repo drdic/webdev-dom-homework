@@ -33,7 +33,7 @@ export function initAddCommentListener() {
             await addComment({
                 name: safeName,
                 text: safeText,
-                forceError: false, // Меняй на true для тестирования 500 ошибок
+                forceError: false, // Меняем на true для тестирования 500 ошибок
             })
 
             // Если успешно - очищаем форму

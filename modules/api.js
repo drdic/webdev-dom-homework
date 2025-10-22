@@ -37,12 +37,12 @@ export async function addComment(
 
         // обработка HTTP статусов
         if (response.status === 500) {
-            // если есть еще попытки, повторяем
+            
             if (retryCount < maxRetries) {
                 console.log(
                     `Сервер вернул 500, повторяем попытку ${retryCount + 1}/${maxRetries}`,
                 )
-                // ждем 1 сек перед повторной попыткой
+                
                 await new Promise((resolve) => setTimeout(resolve, 1000))
                 return addComment({ name, text, forceError }, retryCount + 1)
             }
@@ -61,7 +61,6 @@ export async function addComment(
 
         return await response.json()
     } catch (error) {
-        // если ошибка сети и есть еще попытки - повторяем
         if (error.message === 'Failed to fetch' && retryCount < maxRetries) {
             console.log(
                 `Сетевая ошибка, повторяем попытку ${retryCount + 1}/${maxRetries}`,

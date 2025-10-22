@@ -26,7 +26,6 @@ export function hideFormLoading() {
     const form = document.querySelector('.add-form')
     const formLoading = document.getElementById('form-loading')
 
-    // используем flex вместо block
     form.style.display = 'flex' // Форма изначально flex
     formLoading.style.display = 'none' // Скрываем лоадер
 }
