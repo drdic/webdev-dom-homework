@@ -240,3 +240,72 @@ body {
 .back-button:hover {
   text-decoration: underline;
 }
+
+.auth-prompt {
+  text-align: center;
+  margin: 30px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.auth-text {
+  color: white;
+  font-size: 18px;
+  margin: 0;
+}
+
+.auth-link {
+  color: #bcec30;
+  text-decoration: none;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+.auth-info {
+  color: white;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.logout-button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Стили для формы добавления */
+.add-form-name {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: not-allowed;
+}
+
+.add-form-name::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.loading {
+  text-align: center;
+  color: white;
+  font-size: 18px;
+  padding: 20px;
+}
+
+.no-comments, .error {
+  text-align: center;
+  color: white;
+  padding: 40px;
+  font-size: 18px;
+}

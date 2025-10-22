@@ -37,67 +37,64 @@ function initLoginListeners() {
     const errorElement = document.querySelector('.login-error')
 
     loginForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
+        event.preventDefault()
 
-    const loginInput = document.querySelector('.login-input');
-    const passwordInput = document.querySelector('.password-input');
-    const loginButton = document.querySelector('.login-button');
+        const loginInput = document.querySelector('.login-input')
+        const passwordInput = document.querySelector('.password-input')
+        const loginButton = document.querySelector('.login-button')
 
-    const login = loginInput.value.trim();
-    const password = passwordInput.value.trim();
+        const login = loginInput.value.trim()
+        const password = passwordInput.value.trim()
 
-    // Валидация
-    if (!login || !password) {
-      showError('Заполните все поля');
-      return;
+        // Валидация
+        if (!login || !password) {
+            showError('Заполните все поля')
+            return
+        }
+
+        // Блокируем кнопку на время запроса
+        loginButton.disabled = true
+        loginButton.textContent = 'Входим...'
+        hideError()
+
+        try {
+            // отправляем запрос на авторизацию
+            const { token } = await loginUser({ login, password })
+
+            // сохраняем токен
+            setToken(token)
+
+            // возвращаем на главную страницу
+            renderApp()
+        } catch (error) {
+            // обработка ошибок авторизации
+            if (error.message.includes('Неверный логин или пароль')) {
+                showError('Неверный логин или пароль')
+            } else if (error.message === 'Failed to fetch') {
+                showError('Проблемы с интернетом. Проверьте подключение')
+            } else {
+                showError('Ошибка сервера. Попробуйте позже')
+            }
+
+            // очищаем пароль при ошибке
+            passwordInput.value = ''
+        } finally {
+            // разблокируем кнопку
+            loginButton.disabled = false
+            loginButton.textContent = 'Войти'
+        }
+    })
+
+    backButton.addEventListener('click', () => {
+        renderApp()
+    })
+
+    function showError(message) {
+        errorElement.textContent = message
+        errorElement.style.display = 'block'
     }
 
-    // Блокируем кнопку на время запроса
-    loginButton.disabled = true;
-    loginButton.textContent = 'Входим...';
-    hideError();
-
-    Try {
-        // отправляем запрос на авторизацию
-        const { token } = await loginUser({ login, password });
-
-        // сохраняем токен
-        setToken(token);
-
-        // возвращаем на главную страницу
-        renderApp();
-
-    } catch (error) {
-
-        // обработка ошибок авторизации
-        if (error.message.includes('Неверный логин или пароль')) {
-        showError('Неверный логин или пароль');
-      } else if (error.message === 'Failed to fetch') {
-        showError('Проблемы с интернетом. Проверьте подключение');
-      } else {
-        showError('Ошибка сервера. Попробуйте позже');
-      }
-
-      // очищаем пароль при ошибке
-      passwordInput.value = '';
-    } finally {
-        // разблокируем кнопку
-        loginButton.disabled = false;
-      loginButton.textContent = 'Войти';
+    function hideError() {
+        errorElement.style.display = 'none'
     }
-    
-});
-
-backButton.addEventListener('click', () => {
-    renderApp();
-  });
-
-  function showError(message) {
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
-  }
-
-  function hideError() {
-    errorElement.style.display = 'none';
-  }
 }
