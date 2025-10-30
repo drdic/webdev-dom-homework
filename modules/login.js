@@ -5,6 +5,29 @@ import { renderApp } from '../main.js'
 export function renderLoginPage() {
     const app = document.querySelector('.container')
 
+    //     app.innerHTML = `
+    //     <div class="login-form">
+    //       <h2>Вход в систему</h2>
+    //       <form class="login-form">
+    //         <input
+    //           type="text"
+    //           class="login-input"
+    //           placeholder="Логин"
+    //           required
+    //         />
+    //         <input
+    //           type="password"
+    //           class="password-input"
+    //           placeholder="Пароль"
+    //           required
+    //         />
+    //         <button type="submit" class="login-button">Войти</button>
+    //       </form>
+    //       <div class="login-error" style="display: none; color: red; margin-top: 10px;"></div>
+    //       <button class="back-button">← Назад к комментариям</button>
+    //     </div>
+    //   `
+
     app.innerHTML = `
     <div class="login-form">
       <h2>Вход в систему</h2>
@@ -13,12 +36,14 @@ export function renderLoginPage() {
           type="text" 
           class="login-input" 
           placeholder="Логин" 
+          value="admin"  // временно для теста
           required
         />
         <input 
           type="password" 
           class="password-input" 
           placeholder="Пароль" 
+          value="admin"  // временно для теста
           required
         />
         <button type="submit" class="login-button">Войти</button>

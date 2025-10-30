@@ -1,5 +1,9 @@
+// const API_BASE_URL = 'https://wedev-api.sky.pro/api/v2'
+// const PERSONAL_KEY = 'eduard-zakharevskiy'
+// const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`
+
 const API_BASE_URL = 'https://wedev-api.sky.pro/api/v2'
-const PERSONAL_KEY = 'eduard-zakharevskiy'
+const PERSONAL_KEY = 'glebkaff'
 const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`
 
 // export async function getComments() {

@@ -25,6 +25,54 @@ export function renderApp() {
     renderAddForm()
 }
 
+// async function loadAndRenderComments() {
+//     const loadingElement = document.querySelector('.loading')
+//     const commentsList = document.querySelector('#comments-list')
+
+//     try {
+//         console.log('Начинаем загрузку комментариев...')
+//         loadingElement.style.display = 'block'
+//         commentsList.innerHTML = ''
+
+//         comments = await getComments()
+//         console.log('Комментарии загружены:', comments)
+
+//         if (comments.length === 0) {
+//             commentsList.innerHTML =
+//                 '<li class="no-comments">Комментариев пока нет</li>'
+//             return
+//         }
+
+//         const commentsHTML = comments
+//             .map(
+//                 (comment) => `
+//             <li class="comment">
+//                 <div class="comment-header">
+//                     <div class="comment-name">${comment.author.name}</div>
+//                     <div class="comment-date">${new Date(comment.date).toLocaleString()}</div>
+//                 </div>
+//                 <div class="comment-text">${comment.text}</div>
+//                 <div class="comment-footer">
+//                     <div class="likes">
+//                         <span class="likes-counter">${comment.likes}</span>
+//                         <button class="like-button ${comment.isLiked ? '-active-like' : ''}"></button>
+//                     </div>
+//                 </div>
+//             </li>
+//         `,
+//             )
+//             .join('')
+
+//         commentsList.innerHTML = commentsHTML
+//     } catch (error) {
+//         console.error('Ошибка загрузки:', error)
+//         commentsList.innerHTML = `<li class="error">Ошибка загрузки: ${error.message}</li>`
+//     } finally {
+//         loadingElement.style.display = 'none'
+//         console.log('Загрузка завершена')
+//     }
+// }
+
 async function loadAndRenderComments() {
     const loadingElement = document.querySelector('.loading')
     const commentsList = document.querySelector('#comments-list')
@@ -52,12 +100,6 @@ async function loadAndRenderComments() {
                     <div class="comment-date">${new Date(comment.date).toLocaleString()}</div>
                 </div>
                 <div class="comment-text">${comment.text}</div>
-                <div class="comment-footer">
-                    <div class="likes">
-                        <span class="likes-counter">${comment.likes}</span>
-                        <button class="like-button ${comment.isLiked ? '-active-like' : ''}"></button>
-                    </div>
-                </div>
             </li>
         `,
             )
