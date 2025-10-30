@@ -1,6 +1,13 @@
-const API_BASE_URL = 'https://wedev-api.sky.pro/api/v1'
+const API_BASE_URL = 'https://wedev-api.sky.pro/api/v2'
 const PERSONAL_KEY = 'eduard-zakharevskiy'
 const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`
+const authHost = 'https://wedev-api.sky.pro/api/user'
+
+let token = ''
+
+export const setToken = (newToken) => {
+    token = newToken
+}
 
 export async function getComments() {
     try {
@@ -32,17 +39,19 @@ export async function addComment(
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
             body: JSON.stringify({ name, text, forceError }),
         })
 
         // обработка HTTP статусов
         if (response.status === 500) {
-            
             if (retryCount < maxRetries) {
                 console.log(
                     `Сервер вернул 500, повторяем попытку ${retryCount + 1}/${maxRetries}`,
                 )
-                
+
                 await new Promise((resolve) => setTimeout(resolve, 1000))
                 return addComment({ name, text, forceError }, retryCount + 1)
             }
@@ -72,4 +81,35 @@ export async function addComment(
         console.error('Ошибка при добавлении комментария:', error)
         throw error
     }
+}
+
+export const login = (login, password) => {
+    return fetch(authHost + '/login', {
+        method: 'POST',
+        body: JSON.stringify({
+            login,
+            password,
+        }),
+    }).then((response) => {
+        if (!response.ok) {
+            return response.json().then((errorData) => {
+                throw new Error(errorData.error || 'Ошибка авторизации')
+            })
+        }
+        return response.json()
+    })
+}
+
+export const registration = (name, login, password) => {
+    return fetch(authHost, {
+        method: 'POST',
+        body: JSON.stringify({ name, login, password }),
+    }).then((response) => {
+        if (!response.ok) {
+            return response.json().then((errorData) => {
+                throw new Error(errorData.error || 'Ошибка регистрации')
+            })
+        }
+        return response.json()
+    })
 }

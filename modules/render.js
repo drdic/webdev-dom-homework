@@ -2,9 +2,9 @@ import { comments } from './data.js'
 import { initLikeListeners, initQuoteListeners } from './listeners.js'
 
 export function renderComments() {
-    const commentsList = document.querySelector('.comments')
+    const container = document.querySelector('.container')
 
-    commentsList.innerHTML = comments
+    const commentsHtml = comments
         .map(
             (comment) => `
     <li class="comment" data-id="${comment.id}">
@@ -26,6 +26,36 @@ export function renderComments() {
         )
         .join('')
 
+    const addCommentsHtml = `
+            <div id="comments-loading" class="loading">
+                Пожалуйста подождите, загружаю комментарии...
+            </div>
+            <div id="form-loading" class="loading" style="display: none">
+                Комментарий добавляется...
+            </div>
+            <div class="add-form">
+                <input
+                    type="text"
+                    class="add-form-name"
+                    placeholder="Введите ваше имя"
+                />
+                <textarea
+                    type="textarea"
+                    class="add-form-text"
+                    placeholder="Введите ваш коментарий"
+                    rows="4"
+                ></textarea>
+                <div class="add-form-row">
+                    <button class="add-form-button">Написать</button>
+                </div>
+            </div>`
+
+    const baseHtml = `
+      <ul class="comments">${commentsHtml}</ul>
+      ${addCommentsHtml} 
+    `
+
+    container.innerHTML = baseHtml
     // вызываем функции из listeners.js вместо кода здесь
     initLikeListeners()
     initQuoteListeners()
