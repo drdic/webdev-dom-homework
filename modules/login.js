@@ -1,32 +1,9 @@
-import { loginUser } from './api.js'
+import { login } from './api.js'  // заменил loginUser на login
 import { setToken } from './auth.js'
 import { renderApp } from '../main.js'
 
 export function renderLoginPage() {
     const app = document.querySelector('.container')
-
-    //     app.innerHTML = `
-    //     <div class="login-form">
-    //       <h2>Вход в систему</h2>
-    //       <form class="login-form">
-    //         <input
-    //           type="text"
-    //           class="login-input"
-    //           placeholder="Логин"
-    //           required
-    //         />
-    //         <input
-    //           type="password"
-    //           class="password-input"
-    //           placeholder="Пароль"
-    //           required
-    //         />
-    //         <button type="submit" class="login-button">Войти</button>
-    //       </form>
-    //       <div class="login-error" style="display: none; color: red; margin-top: 10px;"></div>
-    //       <button class="back-button">← Назад к комментариям</button>
-    //     </div>
-    //   `
 
     app.innerHTML = `
     <div class="login-form">
@@ -68,11 +45,11 @@ function initLoginListeners() {
         const passwordInput = document.querySelector('.password-input')
         const loginButton = document.querySelector('.login-button')
 
-        const login = loginInput.value.trim()
+        const loginValue = loginInput.value.trim()  // ← ИЗМЕНИЛ: login на loginValue
         const password = passwordInput.value.trim()
 
         // Валидация
-        if (!login || !password) {
+        if (!loginValue || !password) {
             showError('Заполните все поля')
             return
         }
@@ -84,7 +61,8 @@ function initLoginListeners() {
 
         try {
             // отправляем запрос на авторизацию
-            const { token } = await loginUser({ login, password })
+            const response = await login(loginValue, password)  // ← ИЗМЕНИЛ: новый формат вызова
+            const token = response.token  // ← ИЗМЕНИЛ: получаем токен из response
 
             // сохраняем токен
             setToken(token)
