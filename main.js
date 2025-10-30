@@ -7,19 +7,25 @@ let comments = []
 export function renderApp() {
     const app = document.querySelector('.container')
 
+    //     app.innerHTML = `
+    //     <div class="loading">Загрузка комментариев...</div>
+    //     <button class="debug-refresh" style="margin: 10px; padding: 5px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">Обновить вручную</button>
+    //     <ul class="comments" id="comments-list"></ul>
+    //     <div class="add-form-container"></div>
+    //   `
+
+    //     // Обработчик для дебаг-кнопки
+    //     const refreshBtn = document.querySelector('.debug-refresh')
+    //     refreshBtn.addEventListener('click', () => {
+    //         console.log('Принудительное обновление...')
+    //         loadAndRenderComments()
+    //     })
+
     app.innerHTML = `
     <div class="loading">Загрузка комментариев...</div>
-    <button class="debug-refresh" style="margin: 10px; padding: 5px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">Обновить вручную</button>
     <ul class="comments" id="comments-list"></ul>
     <div class="add-form-container"></div>
   `
-
-    // Обработчик для дебаг-кнопки
-    const refreshBtn = document.querySelector('.debug-refresh')
-    refreshBtn.addEventListener('click', () => {
-        console.log('Принудительное обновление...')
-        loadAndRenderComments()
-    })
 
     loadAndRenderComments()
     renderAddForm()
