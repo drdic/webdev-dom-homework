@@ -62,7 +62,7 @@ function initLoginListeners() {
         try {
             // отправляем запрос на авторизацию
             const response = await login(loginValue, password)  // ← ИЗМЕНИЛ: новый формат вызова
-            const token = response.token  // ← ИЗМЕНИЛ: получаем токен из response
+            const token = response.user.token  // ← ИЗМЕНИЛ: получаем токен из response
 
             // сохраняем токен
             setToken(token)
