@@ -3,6 +3,8 @@ const PERSONAL_KEY = 'eduard-zakharevskiy'
 const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`
 const authHost = 'https://wedev-api.sky.pro/api/user'
 
+import { getToken } from './auth.js'
+
 let token = ''
 
 export const setToken = (newToken) => {
@@ -31,55 +33,56 @@ export async function getComments() {
 }
 
 export async function addComment(
-    { name, text, forceError = false },
+    { text, forceError = false }, // Убрали name из аргументов
     retryCount = 0,
 ) {
-    const maxRetries = 2 // максимально 2 повторные попытки
+    const maxRetries = 2 // максимально 2 повторные попытки [cite: 8]
 
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${token}`,
+                // Динамически берем актуальный токен из auth.js перед отправкой
+                Authorization: `Bearer ${getToken()}`,
             },
-            body: JSON.stringify({ name, text, forceError }),
+            body: JSON.stringify({ text, forceError }), // Передаем только text и forceError
         })
 
-        // обработка HTTP статусов
-        if (response.status === 500) {
-            if (retryCount < maxRetries) {
-                console.log(
-                    `Сервер вернул 500, повторяем попытку ${retryCount + 1}/${maxRetries}`,
-                )
+        // обработка HTTP статусов [cite: 8]
+        if (response.status === 500) { [cite: 8]
+            if (retryCount < maxRetries) { [cite: 8]
+                console.log( [cite: 8]
+                    `Сервер вернул 500, повторяем попытку ${retryCount + 1}/${maxRetries}`, [cite: 8]
+                ) [cite: 8]
 
-                await new Promise((resolve) => setTimeout(resolve, 1000))
-                return addComment({ name, text, forceError }, retryCount + 1)
-            }
-            throw new Error('Сервер сломался, попробуй позже')
-        }
+                await new Promise((resolve) => setTimeout(resolve, 1000)) [cite: 8]
+                return addComment({ text, forceError }, retryCount + 1) // Убрали name [cite: 8]
+            } [cite: 8]
+            throw new Error('Сервер сломался, попробуй позже') [cite: 8]
+        } [cite: 8]
 
-        if (response.status === 400) {
-            throw new Error(
-                'Имя и комментарий должны быть не короче 3 символов',
-            )
-        }
+        if (response.status === 400) { [cite: 8]
+            throw new Error( [cite: 8]
+                'Комментарий должен быть не короче 3 символов', // Скорректировали текст ошибки под v2
+            ) [cite: 8]
+        } [cite: 8]
 
-        if (!response.ok) {
-            throw new Error(`Ошибка сервера: ${response.status}`)
-        }
+        if (!response.ok) { [cite: 8]
+            throw new Error(`Ошибка сервера: ${response.status}`) [cite: 8]
+        } [cite: 8]
 
-        return await response.json()
-    } catch (error) {
-        if (error.message === 'Failed to fetch' && retryCount < maxRetries) {
-            console.log(
-                `Сетевая ошибка, повторяем попытку ${retryCount + 1}/${maxRetries}`,
-            )
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-            return addComment({ name, text, forceError }, retryCount + 1)
-        }
+        return await response.json() [cite: 8]
+    } catch (error) { [cite: 8]
+        if (error.message === 'Failed to fetch' && retryCount < maxRetries) { [cite: 8]
+            console.log( [cite: 8]
+                `Сетевая ошибка, повторяем попытку ${retryCount + 1}/${maxRetries}`, [cite: 8]
+            ) [cite: 8]
+            await new Promise((resolve) => setTimeout(resolve, 1000)) [cite: 8]
+            return addComment({ text, forceError }, retryCount + 1) // Убрали name [cite: 8]
+        } [cite: 8]
 
-        console.error('Ошибка при добавлении комментария:', error)
-        throw error
+        console.error('Ошибка при добавлении комментария:', error) [cite: 8]
+        throw error [cite: 8]
     }
 }
 
