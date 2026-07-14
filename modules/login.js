@@ -1,5 +1,5 @@
 import { login } from './api.js'  // заменил loginUser на login
-import { setToken } from './auth.js'
+import { setToken, setUserName } from './auth.js'
 import { renderApp } from '../main.js'
 
 export function renderLoginPage() {
@@ -61,15 +61,17 @@ function initLoginListeners() {
 
         try {
             // отправляем запрос на авторизацию
-            const response = await login(loginValue, password)  // ← ИЗМЕНИЛ: новый формат вызова
-            const token = response.user.token  // ← ИЗМЕНИЛ: получаем токен из response
-
+            const response = await login(loginValue, password)  // новый формат вызова
+            const token = response.user.token  // получаем токен из response
+            const userName = response.user.name //получаем имя пользователя из ответа
             // сохраняем токен
             setToken(token)
-
+            setUserName(userName) // сохраняем имя
             // возвращаем на главную страницу
             renderApp()
-        } catch (error) {
+        } 
+        
+        catch (error) {
             // обработка ошибок авторизации
             if (error.message.includes('Неверный логин или пароль')) {
                 showError('Неверный логин или пароль')
