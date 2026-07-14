@@ -24,10 +24,20 @@ export function setToken(token) {
 
 export function removeToken() {
     localStorage.removeItem('token')
+    localStorage.removeItem('userName') //удаляем имя при выходе
 }
 
 export function isLoggedIn() {
     return !!getToken()
+}
+
+// Добавляем функции для работы с именем пользователя
+export function getUserName() {
+    return localStorage.getItem('userName')
+}
+
+export function setUserName(name) {
+    localStorage.setItem('userName', name)
 }
 
 // функция для проверки валидности токена
