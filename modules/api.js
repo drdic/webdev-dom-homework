@@ -1,7 +1,10 @@
 import { getToken } from './auth.js'
 
-const HOST = "https://sky.pro";
-const API_URL = `${HOST}/api/v2/drdic/comments`;
+// Возвращаю оригинальные настройки адресов
+const API_BASE_URL = 'https://wedev-api.sky.pro/api/v2'
+const PERSONAL_KEY = 'eduard-zakharevskiy' // Ваш личный ключ
+const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`
+const AUTH_URL = 'https://sky.pro'
 
 export async function getComments() {
     const response = await fetch(API_URL, {
@@ -21,7 +24,7 @@ export async function getComments() {
 }
 
 export async function login(loginValue, password) {
-    const response = await fetch(`${HOST}/api/user/login`, {
+    const response = await fetch(AUTH_URL, {
         method: "POST",
         body: JSON.stringify({
             login: loginValue,
