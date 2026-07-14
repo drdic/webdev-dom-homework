@@ -1,25 +1,11 @@
 import { getComments, addComment } from './modules/api.js'
-import { renderLoginPage } from './modules/login.js'
-import { isLoggedIn } from './modules/auth.js'
+import { renderLoginPage } from './modules/login.js' 
+import { isLoggedIn, getUserName, removeToken } from './modules/auth.js' 
 
 let comments = []
 
 export function renderApp() {
     const app = document.querySelector('.container')
-
-    //     app.innerHTML = `
-    //     <div class="loading">Загрузка комментариев...</div>
-    //     <button class="debug-refresh" style="margin: 10px; padding: 5px; background: #ff6b6b; color: white; border: none; border-radius: 5px; cursor: pointer;">Обновить вручную</button>
-    //     <ul class="comments" id="comments-list"></ul>
-    //     <div class="add-form-container"></div>
-    //   `
-
-    //     // Обработчик для дебаг-кнопки
-    //     const refreshBtn = document.querySelector('.debug-refresh')
-    //     refreshBtn.addEventListener('click', () => {
-    //         console.log('Принудительное обновление...')
-    //         loadAndRenderComments()
-    //     })
 
     app.innerHTML = `
     <div class="loading">Загрузка комментариев...</div>
@@ -59,7 +45,7 @@ async function loadAndRenderComments() {
                 </div>
                 <div class="comment-text">${comment.text}</div>
             </li>
-        `,
+        `
             )
             .join('')
 
@@ -79,21 +65,21 @@ function renderAddForm() {
     if (isLoggedIn()) {
         container.innerHTML = `
             <div class="add-form">
-                <input type="text" class="add-form-name" readonly placeholder="Ваше имя" />
+                <input type="text" class="add-form-name" value="${getUserName() || ''}" readonly />
                 <textarea class="add-form-text" placeholder="Введите ваш комментарий" rows="4"></textarea>
                 <div class="add-form-row">
                     <button class="add-form-button">Написать</button>
                 </div>
-                <div class="auth-info">Вы авторизованы</div>
-                <button class="logout-button">Выйти</button>
+                <div class="auth-info" style="margin-top: 10px; font-size: 14px; color: #bcec30;">Вы вошли как: ${getUserName()}</div>
+                <button class="logout-button" style="margin-top: 10px; background: transparent; color: #ff6b6b; border: 1px solid #ff6b6b; padding: 5px 10px; border-radius: 6px; cursor: pointer;">Выйти</button>
             </div>
         `
 
         initAddFormListeners()
     } else {
         container.innerHTML = `
-            <div class="auth-prompt">
-                <p class="auth-text">Чтобы добавить комментарий, <a href="#" class="auth-link">авторизуйтесь</a></p>
+            <div class="auth-prompt" style="margin-top: 30px; text-align: center;">
+                <p class="auth-text">Чтобы добавить комментарий, <a href="#" class="auth-link" style="color: #bcec30; text-decoration: underline;">авторизуйтесь</a></p>
             </div>
         `
         initAuthLinkListener()
@@ -147,13 +133,12 @@ function initAddFormListeners() {
     const logoutButton = document.querySelector('.logout-button')
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
-            localStorage.removeItem('token')
+            removeToken()
             renderApp()
         })
     }
 }
 
-// Инициализируем приложение при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     renderApp()
 })
