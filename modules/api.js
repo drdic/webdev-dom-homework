@@ -1,118 +1,83 @@
-const API_BASE_URL = 'https://wedev-api.sky.pro/api/v2'
-const PERSONAL_KEY = 'eduard-zakharevskiy'
-const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`
-const authHost = 'https://wedev-api.sky.pro/api/user'
-
 import { getToken } from './auth.js'
 
-let token = ''
-
-export const setToken = (newToken) => {
-    token = newToken
-}
+const HOST = "https://sky.pro";
+const API_URL = `${HOST}/api/v2/drdic/comments`;
 
 export async function getComments() {
-    try {
-        const response = await fetch(API_URL)
+    const response = await fetch(API_URL, {
+        method: "GET",
+    });
 
-        // обработка статусов для GET запроса
-        if (response.status === 500) {
-            throw new Error('Сервер сломался, попробуй позже')
-        }
-
-        if (!response.ok) {
-            throw new Error(`Ошибка загрузки: ${response.status}`)
-        }
-
-        const data = await response.json()
-        return data.comments
-    } catch (error) {
-        console.error('Ошибка при загрузке комментариев:', error)
-        throw error // прокидываем ошибку дальше
+    if (response.status === 500) {
+        throw new Error("Сервер сломался, попробуй позже");
     }
+
+    if (!response.ok) {
+        throw new Error("Не удалось загрузить комментарии");
+    }
+
+    const responseData = await response.json();
+    return responseData.comments;
 }
 
-export async function addComment(
-    { text, forceError = false }, // Убрали name из аргументов
-    retryCount = 0,
-) {
-    const maxRetries = 2 // максимально 2 повторные попытки [cite: 8]
+export async function login(loginValue, password) {
+    const response = await fetch(`${HOST}/api/user/login`, {
+        method: "POST",
+        body: JSON.stringify({
+            login: loginValue,
+            password: password,
+        }),
+    });
+
+    if (response.status === 400) {
+        throw new Error("Неверный логин или пароль");
+    }
+
+    if (!response.ok) {
+        throw new Error("Ошибка сервера при авторизации");
+    }
+
+    return await response.json();
+}
+
+export async function addComment({ text, forceError = false }, retryCount = 0) {
+    const maxRetries = 2;
 
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
-                // Динамически берем актуальный токен из auth.js перед отправкой
                 Authorization: `Bearer ${getToken()}`,
             },
-            body: JSON.stringify({ text, forceError }), // Передаем только text и forceError
-        })
+            body: JSON.stringify({ text, forceError }),
+        });
 
-        // обработка HTTP статусов [cite: 8]
-        if (response.status === 500) { [cite: 8]
-            if (retryCount < maxRetries) { [cite: 8]
-                console.log( [cite: 8]
-                    `Сервер вернул 500, повторяем попытку ${retryCount + 1}/${maxRetries}`, [cite: 8]
-                ) [cite: 8]
+        if (response.status === 500) {
+            if (retryCount < maxRetries) {
+                console.log(`Сервер вернул 500, повторяем попытку ${retryCount + 1}/${maxRetries}`);
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                return addComment({ text, forceError }, retryCount + 1);
+            }
+            throw new Error('Сервер сломался, попробуй позже');
+        }
 
-                await new Promise((resolve) => setTimeout(resolve, 1000)) [cite: 8]
-                return addComment({ text, forceError }, retryCount + 1) // Убрали name [cite: 8]
-            } [cite: 8]
-            throw new Error('Сервер сломался, попробуй позже') [cite: 8]
-        } [cite: 8]
+        if (response.status === 400) {
+            throw new Error('Комментарий должен быть не короче 3 символов');
+        }
 
-        if (response.status === 400) { [cite: 8]
-            throw new Error( [cite: 8]
-                'Комментарий должен быть не короче 3 символов', // Скорректировали текст ошибки под v2
-            ) [cite: 8]
-        } [cite: 8]
+        if (!response.ok) {
+            throw new Error(`Ошибка сервера: ${response.status}`);
+        }
 
-        if (!response.ok) { [cite: 8]
-            throw new Error(`Ошибка сервера: ${response.status}`) [cite: 8]
-        } [cite: 8]
+        return await response.json();
+    } catch (error) {
+        if (error.message === 'Failed to fetch' && retryCount < maxRetries) {
+            console.log(`Сетевая ошибка, повторяем попытку ${retryCount + 1}/${maxRetries}`);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            return addComment({ text, forceError }, retryCount + 1);
+        }
 
-        return await response.json() [cite: 8]
-    } catch (error) { [cite: 8]
-        if (error.message === 'Failed to fetch' && retryCount < maxRetries) { [cite: 8]
-            console.log( [cite: 8]
-                `Сетевая ошибка, повторяем попытку ${retryCount + 1}/${maxRetries}`, [cite: 8]
-            ) [cite: 8]
-            await new Promise((resolve) => setTimeout(resolve, 1000)) [cite: 8]
-            return addComment({ text, forceError }, retryCount + 1) // Убрали name [cite: 8]
-        } [cite: 8]
-
-        console.error('Ошибка при добавлении комментария:', error) [cite: 8]
-        throw error [cite: 8]
+        console.error('Ошибка при добавлении комментария:', error);
+        throw error;
     }
-}
-
-export const login = (login, password) => {
-    return fetch(authHost + '/login', {
-        method: 'POST',
-        body: JSON.stringify({
-            login,
-            password,
-        }),
-    }).then((response) => {
-        if (!response.ok) {
-            return response.json().then((errorData) => {
-                throw new Error(errorData.error || 'Ошибка авторизации')
-            })
-        }
-        return response.json()
-    })
-}
-
-export const registration = (name, login, password) => {
-    return fetch(authHost, {
-        method: 'POST',
-        body: JSON.stringify({ name, login, password }),
-    }).then((response) => {
-        if (!response.ok) {
-            return response.json().then((errorData) => {
-                throw new Error(errorData.error || 'Ошибка регистрации')
-            })
-        }
-        return response.json()
-    })
 }
