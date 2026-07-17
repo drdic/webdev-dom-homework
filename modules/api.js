@@ -4,7 +4,7 @@ import { getToken } from './auth.js'
 const API_BASE_URL = 'https://wedev-api.sky.pro/api/v2'
 const PERSONAL_KEY = 'eduard-zakharevskiy' // Ваш личный ключ
 const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`
-const AUTH_URL = 'https://sky.pro'
+const AUTH_URL = 'https://wedev-api.sky.pro/api/user/login'
 
 export async function getComments() {
     const response = await fetch(API_URL, {
