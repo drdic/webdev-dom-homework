@@ -1,8 +1,7 @@
 import { getToken } from './auth.js'
 
-// Возвращаю оригинальные настройки адресов
 const API_BASE_URL = 'https://wedev-api.sky.pro/api/v2'
-const PERSONAL_KEY = 'eduard-zakharevskiy' // Ваш личный ключ
+const PERSONAL_KEY = 'eduard-zakharevskiy'
 const API_URL = `${API_BASE_URL}/${PERSONAL_KEY}/comments`
 const AUTH_URL = 'https://wedev-api.sky.pro/api/user/login'
 

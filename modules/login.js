@@ -1,4 +1,4 @@
-import { login } from './api.js'  // заменил loginUser на login
+import { login } from './api.js'
 import { setToken, setUserName } from './auth.js'
 import { renderApp } from '../main.js'
 
@@ -43,34 +43,26 @@ function initLoginListeners() {
         const passwordInput = document.querySelector('.password-input')
         const loginButton = document.querySelector('.login-button')
 
-        const loginValue = loginInput.value.trim()  // ← ИЗМЕНИЛ: login на loginValue
+        const loginValue = loginInput.value.trim()
         const password = passwordInput.value.trim()
 
-        // Валидация
         if (!loginValue || !password) {
             showError('Заполните все поля')
             return
         }
 
-        // Блокируем кнопку на время запроса
         loginButton.disabled = true
         loginButton.textContent = 'Входим...'
         hideError()
 
         try {
-            // отправляем запрос на авторизацию
-            const response = await login(loginValue, password)  // новый формат вызова
-            const token = response.user.token  // получаем токен из response
-            const userName = response.user.name //получаем имя пользователя из ответа
-            // сохраняем токен
+            const response = await login(loginValue, password)
+            const token = response.user.token
+            const userName = response.user.name
             setToken(token)
-            setUserName(userName) // сохраняем имя
-            // возвращаем на главную страницу
+            setUserName(userName)
             renderApp()
-        } 
-        
-        catch (error) {
-            // обработка ошибок авторизации
+        } catch (error) {
             if (error.message.includes('Неверный логин или пароль')) {
                 showError('Неверный логин или пароль')
             } else if (error.message === 'Failed to fetch') {
@@ -79,10 +71,8 @@ function initLoginListeners() {
                 showError('Ошибка сервера. Попробуйте позже')
             }
 
-            // очищаем пароль при ошибке
             passwordInput.value = ''
         } finally {
-            // разблокируем кнопку
             loginButton.disabled = false
             loginButton.textContent = 'Войти'
         }

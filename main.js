@@ -1,8 +1,8 @@
 import { getComments, addComment } from './modules/api.js'
 import { renderLoginPage } from './modules/login.js' 
 import { isLoggedIn, getUserName, removeToken } from './modules/auth.js' 
-
-let comments = []
+import { comments } from './modules/data.js'
+import { renderComments } from './modules/render.js'
 
 export function renderApp() {
     const app = document.querySelector('.container')
@@ -22,12 +22,12 @@ async function loadAndRenderComments() {
     const commentsList = document.querySelector('#comments-list')
 
     try {
-        console.log('Начинаем загрузку комментариев...')
         loadingElement.style.display = 'block'
         commentsList.innerHTML = ''
 
-        comments = await getComments()
-        console.log('Комментарии загружены:', comments)
+        const updatedComments = await getComments()
+        comments.length = 0
+        comments.push(...updatedComments)
 
         if (comments.length === 0) {
             commentsList.innerHTML =
@@ -35,27 +35,11 @@ async function loadAndRenderComments() {
             return
         }
 
-        const commentsHTML = comments
-            .map(
-                (comment) => `
-            <li class="comment">
-                <div class="comment-header">
-                    <div class="comment-name">${comment.author.name}</div>
-                    <div class="comment-date">${new Date(comment.date).toLocaleString()}</div>
-                </div>
-                <div class="comment-text">${comment.text}</div>
-            </li>
-        `
-            )
-            .join('')
-
-        commentsList.innerHTML = commentsHTML
+        renderComments()
     } catch (error) {
-        console.error('Ошибка загрузки:', error)
         commentsList.innerHTML = `<li class="error">Ошибка загрузки: ${error.message}</li>`
     } finally {
         loadingElement.style.display = 'none'
-        console.log('Загрузка завершена')
     }
 }
 
@@ -71,7 +55,7 @@ function renderAddForm() {
                     <button class="add-form-button">Написать</button>
                 </div>
                 <div class="auth-info" style="margin-top: 10px; font-size: 14px; color: #bcec30;">Вы вошли как: ${getUserName()}</div>
-                <button class="logout-button" style="margin-top: 10px; background: transparent; color: #ff6b6b; border: 1px solid #ff6b6b; padding: 5px 10px; border-radius: 6px; cursor: pointer;">Выйти</button>
+                <button class="logout-button">Выйти</button>
             </div>
         `
 
@@ -120,7 +104,10 @@ function initAddFormListeners() {
             try {
                 await addComment({ text })
                 textInput.value = ''
-                await loadAndRenderComments()
+                const updatedComments = await getComments()
+                comments.length = 0
+                comments.push(...updatedComments)
+                renderComments()
             } catch (error) {
                 alert(error.message)
             } finally {

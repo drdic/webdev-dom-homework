@@ -18,14 +18,15 @@ export function showFormLoading() {
     const form = document.querySelector('.add-form')
     const formLoading = document.getElementById('form-loading')
 
-    form.style.display = 'none' // Скрываем форму
-    formLoading.style.display = 'block' // Показываем лоадер
+    if (form) form.style.display = 'none'
+    if (formLoading) formLoading.style.display = 'block'
 }
 
 export function hideFormLoading() {
     const form = document.querySelector('.add-form')
     const formLoading = document.getElementById('form-loading')
 
-    form.style.display = 'flex' // Форма изначально flex
-    formLoading.style.display = 'none' // Скрываем лоадер
+    if (form) form.style.display = 'flex'
+    if (formLoading) formLoading.style.display = 'none'
 }
+
