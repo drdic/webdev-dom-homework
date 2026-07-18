@@ -12,15 +12,13 @@ export function renderLoginPage() {
         <input 
           type="text" 
           class="login-input" 
-          placeholder="Логин" 
-          value="admin"  // временно для теста
+          placeholder="Логин"
           required
         />
         <input 
           type="password" 
           class="password-input" 
-          placeholder="Пароль" 
-          value="admin"  // временно для теста
+          placeholder="Пароль"
           required
         />
         <button type="submit" class="login-button">Войти</button>

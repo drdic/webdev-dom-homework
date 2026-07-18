@@ -186,7 +186,6 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  width: 360px;
   background: radial-gradient(75.42% 75.42% at 50% 42.37%, rgba(53, 53, 53, 0) 22.92%, #7334ea 100%);
   padding: 40px;
   border-radius: 20px;
