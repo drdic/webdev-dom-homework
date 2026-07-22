@@ -1,10 +1,15 @@
 import { comments } from './data.js'
 import { initLikeListeners, initQuoteListeners } from './listeners.js'
+import { isLoggedIn } from './auth.js'
 
 export function renderComments() {
-    const commentsList = document.querySelector('.comments')
+    const commentsList = document.querySelector('#comments-list')
 
-    commentsList.innerHTML = comments
+    if (!commentsList) return
+
+    const isAuth = isLoggedIn()
+
+    const commentsHtml = comments
         .map(
             (comment) => `
     <li class="comment" data-id="${comment.id}">
@@ -26,7 +31,10 @@ export function renderComments() {
         )
         .join('')
 
-    // вызываем функции из listeners.js вместо кода здесь
-    initLikeListeners()
-    initQuoteListeners()
+    commentsList.innerHTML = commentsHtml
+
+    if (isAuth) {
+        initLikeListeners()
+        initQuoteListeners()
+    }
 }
