@@ -1,10 +1,13 @@
 import { comments } from './data.js'
 import { initLikeListeners, initQuoteListeners } from './listeners.js'
+import { isLoggedIn } from './auth.js'
 
 export function renderComments() {
     const commentsList = document.querySelector('#comments-list')
 
     if (!commentsList) return
+
+    const isAuth = isLoggedIn()
 
     const commentsHtml = comments
         .map(
@@ -29,7 +32,9 @@ export function renderComments() {
         .join('')
 
     commentsList.innerHTML = commentsHtml
-    initLikeListeners()
-    initQuoteListeners()
-}
 
+    if (isAuth) {
+        initLikeListeners()
+        initQuoteListeners()
+    }
+}
